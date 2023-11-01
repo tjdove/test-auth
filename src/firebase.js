@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+//import { initializeApp } from "firebase/app";
+//import { getAuth } from "firebase/auth";
 //import { getAnalytics } from "firebase/analytics";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -10,7 +10,7 @@ import { getAuth } from "firebase/auth";
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 
 //Using Vite to build instead of WebPack, so "process" is not avail. use "import.meta.env" instead.
-const firebaseConfig = {
+export const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
   authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
   databaseURL: import.meta.env.VITE_FIREBASE_DATABASE_URL,
@@ -23,8 +23,8 @@ const firebaseConfig = {
 
 // Initialize Firebase
 //console.log("FIREBASE: " + JSON.stringify(firebaseConfig));
-const app = initializeApp(firebaseConfig);
+// const app = initializeApp(firebaseConfig);
 
-export const auth = getAuth(app);
-export default app;
+// export const auth = getAuth(app);
+//export default app;
 //const analytics = getAnalytics(app);

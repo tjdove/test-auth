@@ -1,16 +1,28 @@
 import React, { useContext, useEffect, useState } from "react";
-import { auth } from "../firebase";
+import { firebaseConfig } from "../firebase";
+import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
+
 import {
   createUserWithEmailAndPassword,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
-  updateEmail,
+  sendEmailVerification,
   verifyBeforeUpdateEmail,
   updatePassword,
 } from "firebase/auth";
+
+//INitialize the firebase app.
+const app = initializeApp(firebaseConfig);
+//Use it to build the Auth.
+//Returns the Auth instance associated with the provided @firebase/app#FirebaseApp.
+const auth = getAuth(app);
+
+//Creat the new context for Auth
 const AuthContext = React.createContext();
 
 export function useAuth() {
+  //Set the AC we just made.
   return useContext(AuthContext);
 }
 
@@ -20,6 +32,10 @@ export function AuthProvider({ children }) {
 
   function signup(email, password) {
     return createUserWithEmailAndPassword(auth, email, password);
+  }
+  function sendSignupEmail(email) {
+    //???  Not working
+    return sendEmailVerification(auth.currentUser, email);
   }
   function login(email, password) {
     return signInWithEmailAndPassword(auth, email, password);
@@ -37,8 +53,11 @@ export function AuthProvider({ children }) {
     return updatePassword(auth.currentUser, password);
   }
   useEffect(() => {
+    //Adds an observer for changes to the user's sign-in state.
     const unsubscribe = auth.onAuthStateChanged((user) => {
+      //Either set the user or set null
       setCurrentUser(user);
+      //alert("onAuthStateChanged" + JSON.stringify(user));
       setLoading(false); //We have a user by now we are done loading
     });
     return unsubscribe;
@@ -47,6 +66,7 @@ export function AuthProvider({ children }) {
   const value = {
     currentUser,
     signup,
+    sendSignupEmail,
     login,
     logout,
     resetPassword,

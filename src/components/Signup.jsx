@@ -1,5 +1,4 @@
 import { useRef, useState } from "react";
-import { Card, Form, Button, CardBody, Alert } from "react-bootstrap";
 import { useAuth } from "../contexts/AuthConext";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -7,7 +6,8 @@ export default function Signup() {
   const emailRef = useRef();
   const passwordRef = useRef();
   const passwordConfirmRef = useRef();
-  const { signup } = useAuth();
+
+  const { signup, sendSignupEmail } = useAuth();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -23,6 +23,7 @@ export default function Signup() {
       setError("");
       setLoading(true);
       await signup(emailRef.current.value, passwordRef.current.value);
+      await sendSignupEmail(emailRef.current.value);
       navigate("/");
     } catch (error) {
       console.error(error);

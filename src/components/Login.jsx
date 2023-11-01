@@ -10,15 +10,19 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  //console.log("AUTH:email: " + JSON.stringify(emailRef));
+
   async function handleSubmit(e) {
     e.preventDefault();
 
     try {
       setError("");
       setLoading(true);
+      console.log("AUTH:email: " + emailRef.current.value);
       await login(emailRef.current.value, passwordRef.current.value);
       navigate("/");
     } catch (error) {
+      console.log("AUTH:ERROR!!!: " + error);
       console.error(error);
       setError("Failed: Sign In");
     }
