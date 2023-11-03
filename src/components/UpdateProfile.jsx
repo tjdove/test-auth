@@ -11,11 +11,8 @@ export default function UpdateProfile() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  console.log("UpdateProfile:handleSubmit");
-
   async function handleSubmit(e) {
     e.preventDefault();
-    console.log("UpdateProfile:handleSubmit");
 
     if (passwordRef.current.value !== passwordConfirmRef.current.value) {
       return setError("Passwords do not match");
@@ -31,9 +28,6 @@ export default function UpdateProfile() {
         "updateProfile:handlesubmit:emailRef.current.value: " +
           emailRef.current.value
       );
-      console.log(
-        "updateProfile:handlesubmit:currentUser.email: " + currentUser.email
-      );
       promises.push(updateUserEmail(emailRef.current.value));
     }
     //Changing password?
@@ -43,7 +37,7 @@ export default function UpdateProfile() {
 
     Promise.all(promises)
       .then(() => {
-        navigate("/testtest");
+        navigate("/");
       })
       .catch((error) => {
         console.log("updateProfile:handlesubmit:error:" + error);

@@ -7,11 +7,10 @@ export default function Signup() {
   const passwordRef = useRef();
   const passwordConfirmRef = useRef();
 
-  const { signup, sendSignupEmail } = useAuth();
+  const { signup } = useAuth();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  console.log("Signup:file loaded");
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -24,14 +23,8 @@ export default function Signup() {
       setError("");
       setLoading(true);
       //Send the email and password form the form to the auth signup()
-      const user = await signup(
-        emailRef.current.value,
-        passwordRef.current.value
-      );
+      await signup(emailRef.current.value, passwordRef.current.value);
       //Send the returned user.
-      //console.log("Signup:currentUser:");
-      //console.log(currentUser);
-      //await sendSignupEmail(currentUser); //, emailRef.current.value);
       navigate("/");
     } catch (error) {
       console.error(error);
