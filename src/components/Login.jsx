@@ -96,7 +96,6 @@ export default function Login() {
           <Link to="/signup"> Sign Up</Link>
         </div>
       </div>
-      ;
     </>
   );
 }
