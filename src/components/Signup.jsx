@@ -29,8 +29,8 @@ export default function Signup() {
         passwordRef.current.value
       );
       //Send the returned user.
-      console.log("Signup:currentUser:");
-      console.log(currentUser);
+      //console.log("Signup:currentUser:");
+      //console.log(currentUser);
       //await sendSignupEmail(currentUser); //, emailRef.current.value);
       navigate("/");
     } catch (error) {

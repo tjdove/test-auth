@@ -36,13 +36,10 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
   console.log("AuthProvider:constructor");
 
-  function signup(email, password) {
-    return createUserWithEmailAndPassword(auth, email, password).then(
-      (user) => {
-        console.log(auth.user);
-        sendEmailVerification(auth.user);
-      }
-    );
+  async function signup(email, password) {
+    //THIS WORKS FINALLY!
+    await createUserWithEmailAndPassword(auth, email, password);
+    await sendEmailVerification(auth.currentUser);
   }
   function sendSignupEmail() {
     return sendEmailVerification(currentUser);
