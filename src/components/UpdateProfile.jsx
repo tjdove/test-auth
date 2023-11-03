@@ -11,8 +11,11 @@ export default function UpdateProfile() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  function handleSubmit(e) {
+  console.log("UpdateProfile:handleSubmit");
+
+  async function handleSubmit(e) {
     e.preventDefault();
+    console.log("UpdateProfile:handleSubmit");
 
     if (passwordRef.current.value !== passwordConfirmRef.current.value) {
       return setError("Passwords do not match");
@@ -23,6 +26,14 @@ export default function UpdateProfile() {
     setError("");
     //Are we changing the Email?
     if (emailRef.current.value !== currentUser.email) {
+      console.log("updateProfile:handlesubmit:");
+      console.log(
+        "updateProfile:handlesubmit:emailRef.current.value: " +
+          emailRef.current.value
+      );
+      console.log(
+        "updateProfile:handlesubmit:currentUser.email: " + currentUser.email
+      );
       promises.push(updateUserEmail(emailRef.current.value));
     }
     //Changing password?
@@ -32,28 +43,15 @@ export default function UpdateProfile() {
 
     Promise.all(promises)
       .then(() => {
-        navigate("/");
+        navigate("/testtest");
       })
-      .catch(() => {
+      .catch((error) => {
+        console.log("updateProfile:handlesubmit:error:" + error);
         setError("Failed: Update Account");
       })
       .finally(() => {
         setLoading(false);
       });
-
-    try {
-      setError("");
-      setLoading(true);
-      updateUserPassword();
-      //updateUserPassword
-
-      //await signup(emailRef.current.value, passwordRef.current.value);
-      navigate("/");
-    } catch (error) {
-      console.error(error);
-      setError("Failed: Create account");
-    }
-    setLoading(false);
   }
   return (
     <>

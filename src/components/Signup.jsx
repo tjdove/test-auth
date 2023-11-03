@@ -11,10 +11,11 @@ export default function Signup() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  console.log("Signup:file loaded");
 
   async function handleSubmit(e) {
     e.preventDefault();
-
+    console.log("Signup:handleSubmit");
     if (passwordRef.current.value !== passwordConfirmRef.current.value) {
       return setError("Passwords do not match");
     }
@@ -22,13 +23,21 @@ export default function Signup() {
     try {
       setError("");
       setLoading(true);
-      await signup(emailRef.current.value, passwordRef.current.value);
-      await sendSignupEmail(emailRef.current.value);
+      //Send the email and password form the form to the auth signup()
+      const user = await signup(
+        emailRef.current.value,
+        passwordRef.current.value
+      );
+      //Send the returned user.
+      console.log("Signup:currentUser:");
+      console.log(currentUser);
+      //await sendSignupEmail(currentUser); //, emailRef.current.value);
       navigate("/");
     } catch (error) {
       console.error(error);
       setError("Failed: Create account");
     }
+
     setLoading(false);
   }
   return (

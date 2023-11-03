@@ -3,23 +3,27 @@ import { useAuth } from "../contexts/AuthConext";
 import { Link, useNavigate } from "react-router-dom";
 
 export default function Login() {
-  const emailRef = useRef();
-  const passwordRef = useRef();
+  const emailRef = useRef("");
+  const passwordRef = useRef("");
   const { login } = useAuth();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-
-  //console.log("AUTH:email: " + JSON.stringify(emailRef));
+  console.log("Login:file loaded");
+  //alert("Login:outside: " + stringify(emailRef));
+  console.log("Login:outside: " + emailRef.current.value);
 
   async function handleSubmit(e) {
     e.preventDefault();
-
+    console.log("Login:handleSubmit");
     try {
       setError("");
       setLoading(true);
-      console.log("AUTH:email: " + emailRef.current.value);
+      console.log("Login:inside: : " + emailRef.current.value);
+
       await login(emailRef.current.value, passwordRef.current.value);
+      emailRef.current.value = "";
+      passwordRef.current.value = "";
       navigate("/");
     } catch (error) {
       console.log("AUTH:ERROR!!!: " + error);
@@ -102,3 +106,20 @@ export default function Login() {
     </>
   );
 }
+
+// function stringify(obj) {
+//   let cache = [];
+//   let str = JSON.stringify(obj, function (key, value) {
+//     if (typeof value === "object" && value !== null) {
+//       if (cache.indexOf(value) !== -1) {
+//         // Circular reference found, discard key
+//         return;
+//       }
+//       // Store value in our collection
+//       cache.push(value);
+//     }
+//     return value;
+//   });
+//   cache = null; // reset the cache
+//   return str;
+// }

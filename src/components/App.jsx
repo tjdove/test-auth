@@ -8,9 +8,11 @@ import Login from "./Login.jsx";
 import ForgotPassword from "./ForgotPassword";
 import UpdateProfile from "./UpdateProfile";
 import { PrivateRoute } from "./routing/PrivateRoute";
+console.log("App:file loaded");
 
 function App() {
   // const [count, setCount] = useState(0);
+  console.log("App:constructor");
 
   return (
     <Container

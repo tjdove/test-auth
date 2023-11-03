@@ -8,20 +8,25 @@ import {
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
   sendEmailVerification,
-  verifyBeforeUpdateEmail,
+  updateEmail,
+  // verifyBeforeUpdateEmail,
   updatePassword,
 } from "firebase/auth";
 
+console.log("AuthContext:file loaded");
 //INitialize the firebase app.
 const app = initializeApp(firebaseConfig);
+console.log("Firebase config:");
 //Use it to build the Auth.
 //Returns the Auth instance associated with the provided @firebase/app#FirebaseApp.
 const auth = getAuth(app);
 
 //Creat the new context for Auth
 const AuthContext = React.createContext();
+console.log("React Context created");
 
 export function useAuth() {
+  console.log("AuthContext:useAuth");
   //Set the AC we just made.
   return useContext(AuthContext);
 }
@@ -29,13 +34,18 @@ export function useAuth() {
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState();
   const [loading, setLoading] = useState(true);
+  console.log("AuthProvider:constructor");
 
   function signup(email, password) {
-    return createUserWithEmailAndPassword(auth, email, password);
+    return createUserWithEmailAndPassword(auth, email, password).then(
+      (user) => {
+        console.log(auth.user);
+        sendEmailVerification(auth.user);
+      }
+    );
   }
-  function sendSignupEmail(email) {
-    //???  Not working
-    return sendEmailVerification(auth.currentUser, email);
+  function sendSignupEmail() {
+    return sendEmailVerification(currentUser);
   }
   function login(email, password) {
     return signInWithEmailAndPassword(auth, email, password);
@@ -47,17 +57,21 @@ export function AuthProvider({ children }) {
     return sendPasswordResetEmail(auth, email);
   }
   function updateUserEmail(email) {
-    return verifyBeforeUpdateEmail(auth.currentUser, email); //Not working right...
+    console.log("AuthProvider:updateUserEmail:" + email);
+    return updateEmail(currentUser, email); //Not working right...
   }
   function updateUserPassword(password) {
-    return updatePassword(auth.currentUser, password);
+    // console.log("AuthProvider:updateUserPassword");
+    // return updatePassword(auth, password);
   }
   useEffect(() => {
+    console.log("AuthProvider:useEffect");
     //Adds an observer for changes to the user's sign-in state.
     const unsubscribe = auth.onAuthStateChanged((user) => {
+      //alert("onAuthStateChanged");
       //Either set the user or set null
       setCurrentUser(user);
-      //alert("onAuthStateChanged" + JSON.stringify(user));
+      //alert("onAuthStateChanged:useEffect: " + JSON.stringify(user));
       setLoading(false); //We have a user by now we are done loading
     });
     return unsubscribe;
