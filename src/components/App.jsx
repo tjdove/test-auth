@@ -7,6 +7,8 @@ import Login from "./Login.jsx";
 import ForgotPassword from "./ForgotPassword";
 import UpdateProfile from "./UpdateProfile";
 import { PrivateRoute } from "./routing/PrivateRoute";
+import Lookup from "./Lookup.jsx";
+import CustomerLookup from "./CustomerLookup.jsx";
 
 function App() {
   return (
@@ -14,17 +16,20 @@ function App() {
     //   className="container mx-auto px-4 w-100"
     //   style={{ minHeight: "100vh" }}
     // >
-    <div className="container  mx-auto max-w-sm my-10">
+    <div className="container  mx-auto  my-10 border border-blue-500">
       <Router>
         <AuthProvider>
           <Routes>
             <Route exact path="/" Component={PrivateRoute}>
               <Route path="/" Component={Dashboard} />
               <Route path="/update-profile" Component={UpdateProfile} />
+              <Route path="/lookup-customer" Component={CustomerLookup} />
             </Route>
             <Route path="/signup" Component={Signup} />
             <Route path="/login" Component={Login} />
             <Route path="/forgot-password" Component={ForgotPassword} />
+            <Route path="/lookup" Component={Lookup} />
+            {/* <Route path="/contact" Component={Contact} /> */}
           </Routes>
         </AuthProvider>
       </Router>

@@ -1,67 +1,160 @@
-# Test-Auth
+How this was built:
 
-Welcome to the `Test-Auth` project. This project aims to be a complete authentication implementation using Firebase, designed specifically for React applications. It encapsulates all the essential features required for user authentication, including sign-up, log-in, password reset, and more. By integrating `Test-Auth` into your React app, you can enable robust and secure user authentication.
+New Project:
 
-## Features
+npm create vite@latest
 
-- **Firebase Authentication**: Leverages Firebase for secure and reliable user authentication.
-- **Sign Up**: Allows new users to create an account.
-- **Log In**: Enables existing users to log in to their accounts.
-- **Password Reset**: Provides users with the ability to reset their forgotten passwords.
-- **User Profile Management**: Lets users view and update their profile information.
-- **Email Verification**: Includes email verification for new accounts.
-- **Responsive Design**: Ensures a seamless experience across various devices and screen sizes.
+creates the base.
 
-## Getting Started
+npm install
 
-### Prerequisites
+Addeed \*.env to the gitignore file
+Added a .prettierignore file to prevent trouble with MD files.
 
-Before you begin, ensure you have the following installed:
-- [Node.js](https://nodejs.org/)
-- [npm](https://npmjs.com/) (usually comes with Node.js)
-- A [Firebase Project](https://console.firebase.google.com/)
+git init
+commit
+create new github and push
 
-### Installation
+git commit -m "first commit"
+git branch -M main
+git remote add origin git@github.com:tjdove/shop-minder.git
+git push -u origin main
 
-1. **Clone the Repository**
+Turn off linting of MD files:temp
+markdownlint.toggleLinting
 
-   ```bash
-   git clone https://github.com/tjdove/test-auth.git
-   cd test-auth
-   npm install
-   ```
+---
 
-2. **Firebase Configuration** 
-  - Set up a Firebase project and enable Authentication.
-  - In the Firebase Console, navigate to Project Settings and find your Firebase config object.
-  - Create a .env file in the root of the project and add your Firebase configuration:
-```
-REACT_APP_FIREBASE_API_KEY=your_api_key
-REACT_APP_FIREBASE_AUTH_DOMAIN=your_auth_domain
-REACT_APP_FIREBASE_PROJECT_ID=your_project_id
-REACT_APP_FIREBASE_STORAGE_BUCKET=your_storage_bucket
-REACT_APP_FIREBASE_MESSAGING_SENDER_ID=your_messaging_sender_id
-REACT_APP_FIREBASE_APP_ID=your_app_id
-```
-3. **Start the Development Server**
-4. npm run dev
+Tailwind setup
 
-## Usage
-After integrating Test-Auth into your React app, you can customize the authentication flow as needed. The components are designed to be modular, allowing for easy integration and customization.
+npm install -D tailwindcss postcss autoprefixer
+npx tailwindcss init
 
-## Contributing
-Contributions to Test-Auth are welcome! Whether it's submitting a bug report, a feature request, or a pull request, all contributions are appreciated.
+Make sure postcss.config.cts and tailwind.config.cts are .cts files.
 
-## Fork the Repository
-Create a Branch (git checkout -b feature/AmazingFeature)
-Commit Your Changes (git commit -m 'Add some AmazingFeature')
-Push to the Branch (git push origin feature/AmazingFeature)
-Open a Pull Request
-License
-Distributed under the MIT License. See LICENSE for more information.
+---
 
-Contact
-Twitter - @AsheAVeDev
+main.tsx - Where render is called on the root from index.html. More like a launcher.
 
-Project Link: https://github.com/tjdove/test-auth
-   
+- ReactDOM.createRoot(document.getElementById('root')!).render(
+
+App.ts - Root of the actual app.
+
+- This is where post 6.4 router style starts
+- const router = createBrowserRouter(
+  createRoutesFromElements(
+
+Put route objects in as elements:
+<Route path="/" element={<RootLayout />}>
+<Route index element={<Home />}></Route>
+</Route>
+
+---
+
+Login
+Home
+
+---
+
+main.tsx loads index.css and App.css
+
+---
+
+Use autocomplete attributes
+Autocomplete attributes help password managers to infer the purpose of a field in a form, saving them from accidentally saving or autofilling the wrong data. A little annotation can go a long way: some common values for text fields are “username”, “current-password” (login forms and change password forms) and “new-password” (registration and change password forms). See a detailed write-up with examples.
+
+Fields that are not passwords, but should be obscured, such as credit card numbers, may also have a type="password" attribute, but should contain the relevant autocomplete attribute, such as "cc-number" or "cc-csc".
+
+## https://www.chromium.org/developers/design-documents/create-amazing-password-forms/
+
+---
+
+Install/init prisma, planetscale
+
+Create schema in schema.prisma file.
+@@map lets you remap the name of the field from the model name.
+THis way I can reuse differnt user schema without name conflict in the same database.
+
+- Planetscale only gives one free database. Gotta namespace it.
+
+# Create a connection to the planetscale server.
+
+Shell:
+pscale shell devappserver main
+
+(main is the branch)
+// Leave it up and running while you develop.
+pscale connect devappserver main --port 3309
+
+---
+
+prisma db pull - gets the current state of the database and merges it with existing schema.prisma file.
+
+Drop tables manually. I do this just to make sure. I never override a warning from "db push".
+
+//Runs schema.prisma which builds the tables out
+npx prisma db push
+
+//build client.
+prisma generate
+
+Dont forget to run GENERATE or the Prisma client code won't line up with the schema and havok occurs.
+
+//Insert Test data and start API
+npm run insertData
+npm run startAPI
+
+---
+
+Now build out the API server.
+Using Express and PrismaClient.
+
+Seperated out the User calls into users.ts.
+
+Need more complete erorr handling.
+
+---
+
+Got the API back in working state. Now pulling Users with roles.
+
+Added this proxy setup to vite.config.ts
+
+export default defineConfig({
+plugins: [react()],
+server: {
+proxy: {
+"/api": "http://127.0.0.1:8080",
+},
+},
+});
+
+Tells vite to redirect the port so avoiding CORS errors.
+
+Had a nightmare with CORS errors.
+Turns out you don't ever use the localhost:8080 when calling the APIs
+The proxy will fix all of that. Believe in the vite proxy setup I have here.
+
+---
+
+Figure out favicon. Where it goes. I like them.
+
+---
+
+Figured out passing object parameters with TypeScript:Aqua-Minder
+
+users.map((thisUser: User) => (
+<UserDisplay user={thisUser} key={thisUser.id} />
+))
+
+export default function UserDisplay({ user }: { user: User }) {
+}
+
+yes you need all that mess to pass one user. Insane. There may be other ways but I had a nightmare with this too.
+
+Living with it for now.
+
+---
+
+Authentication:
+Using FireBase Auth
+Built another app to figure this out. What a mess auth is.
