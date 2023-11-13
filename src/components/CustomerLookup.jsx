@@ -1,11 +1,11 @@
 import { useRef, useState } from "react";
 // import { useAuth } from "../contexts/AuthConext";
-import { Link } from "react-router-dom";
+//import { Link } from "react-router-dom";
 
-async function loadCustomer(thisPlate) {
-  console.log("loadCustomer");
-  const res = await fetch(`/api/users/` + thisPlate);
-  console.log("loadCustomer: " + JSON.stringify(res));
+async function loadAutoByPlate(thisPlate) {
+  console.log("loadAuto");
+  const res = await fetch(`/api/autos/plate/` + thisPlate);
+  console.log("loadAuto: " + JSON.stringify(res));
   console.log(res);
 
   if (!res.ok) {
@@ -16,6 +16,7 @@ async function loadCustomer(thisPlate) {
 
 export default function CustomerLookup() {
   const plateRef = useRef();
+  const [auto, setAuto] = useState(null);
 
   //const { currentUser } = useAuth();
   const [error, setError] = useState("");
@@ -33,8 +34,14 @@ export default function CustomerLookup() {
     if (plate.length < 4 || plate.length > 8) {
       return setError("Passwords do not match");
     }
-    //Else load the customers data, and display it:
-
+    //Else load the auto data, and display it:
+    try {
+      const auto = await loadAutoByPlate(plate);
+      console.log("handleSubmit: auto: " + auto);
+    } catch (error) {
+      console.log("Invalid plate numner!!");
+      setError("Invalid plate numner!!");
+    }
     //const promises = [];
     setLoading(true);
     setError("");
@@ -52,6 +59,7 @@ export default function CustomerLookup() {
       promises.push(updateUserPassword(passwordRef.current.value));
     } */
   }
+
   return (
     <>
       <div className="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">

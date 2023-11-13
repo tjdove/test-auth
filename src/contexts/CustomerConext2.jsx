@@ -1,14 +1,32 @@
 import React, { useContext, useEffect, useState } from "react";
+import { firebaseConfig } from "../firebase";
+import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
+
+import {
+  createUserWithEmailAndPassword,
+  sendPasswordResetEmail,
+  signInWithEmailAndPassword,
+  sendEmailVerification,
+  updateEmail,
+  updatePassword,
+} from "firebase/auth";
+
+//Initialize the firebase app.
+const app = initializeApp(firebaseConfig);
+//Use it to build the Auth.
+//Returns the Auth instance associated with the provided @firebase/app#FirebaseApp.
+const auth = getAuth(app);
 
 //Creat the new context for Auth
-const CustomerContext = React.createContext();
+const AuthContext = React.createContext();
 
-export function useCustomer() {
+export function useAuth() {
   //Set the AC we just made.
-  return useContext(CustomerContext);
+  return useContext(AuthContext);
 }
 
-export function CustomerProvider({ children }) {
+export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState();
   const [loading, setLoading] = useState(true);
 

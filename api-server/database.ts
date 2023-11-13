@@ -89,6 +89,15 @@ export async function removeUser(id: number): Promise<void> {
   });
 }
 
+export async function getAutos() {
+  const autos = await prisma.auto.findMany({
+    include: {
+      jobs: true,
+    },
+  });
+  return autos;
+}
+
 //Autos
 export async function getAutoByPlate(plate: string): Promise<Auto | null> {
   const auto = await prisma.auto.findUnique({

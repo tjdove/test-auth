@@ -2,21 +2,30 @@ import express from "express";
 export const autoRouter = express.Router();
 
 //Client methods to prisma.
-import { getAutoByPlate } from "../database";
+import { getAutoByPlate, getAutos } from "../database";
 
 // Get All
-/* autoRouter.get("/", async (req, res) => {
+autoRouter.get("/", async (req, res) => {
+  console.log("/auto");
   const autos = await getAutos();
   res.send(autos);
   // res.status(201).json(autos);
 });
- */
+
 // Get one by Plate
 autoRouter.get("/plate/:id", async (req, res) => {
+  console.log("/auto/plate/:PLATE");
   const plate: string = req.params.id;
   console.log("/plate/:id:  " + plate);
-  const user = await getAutoByPlate(plate);
-  res.send(user);
+  const auto = await getAutoByPlate(plate);
+  console.log("/plate/:id:auto  " + auto);
+  console.log(auto);
+  if (auto == null) {
+    res.status(404).send("Plate Not Found");
+  } else {
+    //res.statusCode;
+    res.send(auto);
+  }
 });
 
 // Create

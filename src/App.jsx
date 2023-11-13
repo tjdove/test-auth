@@ -1,14 +1,15 @@
 // import { useState } from "react";
-import Signup from "./Signup.jsx";
-import { AuthProvider } from "../contexts/AuthConext.jsx";
+import Signup from "./components/Signup.jsx";
+import { AuthProvider } from "./contexts/AuthConext.jsx";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Dashboard from "./Dashboard";
-import Login from "./Login.jsx";
-import ForgotPassword from "./ForgotPassword";
-import UpdateProfile from "./UpdateProfile";
-import { PrivateRoute } from "./routing/PrivateRoute";
-import Lookup from "./Lookup.jsx";
-import CustomerLookup from "./CustomerLookup.jsx";
+import Dashboard from "./components/Dashboard.jsx";
+import Login from "./components/Login.jsx";
+import ForgotPassword from "./components/ForgotPassword.jsx";
+import UpdateProfile from "./components/UpdateProfile.jsx";
+import { PrivateRoute } from "./components/routing/PrivateRoute.jsx";
+import Lookup from "./components/Lookup.jsx";
+import AutoLookup from "./components/AutoLookup.jsx";
+//import CustomerContextProvider from "./contexts/CustomerConext";
 
 function App() {
   return (
@@ -20,11 +21,13 @@ function App() {
       <Router>
         <AuthProvider>
           <Routes>
+            {/* <CustomerContextProvider> */}
             <Route exact path="/" Component={PrivateRoute}>
               <Route path="/" Component={Dashboard} />
               <Route path="/update-profile" Component={UpdateProfile} />
-              <Route path="/lookup-customer" Component={CustomerLookup} />
+              <Route path="/lookup-customer" Component={AutoLookup} />
             </Route>
+            {/* </CustomerContextProvider> */}
             <Route path="/signup" Component={Signup} />
             <Route path="/login" Component={Login} />
             <Route path="/forgot-password" Component={ForgotPassword} />

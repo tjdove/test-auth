@@ -23,7 +23,7 @@ try {
 //Tell the main app to add the routes for the UsersAPI calls
 app.use("/api/users", userRouter);
 app.use("/api/jobs", jobRouter);
-app.use("/api/auto", autoRouter);
+app.use("/api/autos", autoRouter);
 
 app.listen(8080, () => console.log("Example app listening on port 8080"));
 

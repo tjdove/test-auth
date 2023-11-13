@@ -23,11 +23,10 @@ datasource db {
     state     String
     zip       String
     roles     Role[] // User has many roles
-    autos     Auto[] // User has many autos
     createdAt DateTime @default(now())
     updateAt  DateTime @updatedAt
   }
-
+//autos     Auto[] // User has many autos
   model Role {
     @@map("shop_role")
     id        Int    @id @default(autoincrement())
@@ -46,11 +45,11 @@ datasource db {
     model     String
     color     String
     jobs      Job[] // Auto has many Jobs  
-    userId    Int 
-    user      User     @relation(fields: [userId], references: [id])
     createdAt DateTime @default(now())
     updateAt  DateTime @updatedAt
   }
+    //userId    Int 
+    //user      User     @relation(fields: [userId], references: [id])
 
 model Job {
     @@map("shop_job")
